@@ -2,8 +2,15 @@
 """
 Created on Tue Jan 31 10:43:16 2017
 
+Rules:
+The first player (White) must place them horizontally
+the second player (Black) must place them vertically
+
+
 @author: Riheng Zhu
 """
+import random
+
 
 class Grille():
     def __init__(self,taille):
@@ -53,14 +60,33 @@ class Grille():
                      liste_possible.append([i,j,i+1,j])
             pass
         return liste_possible    
-        
+    
+    def coup_aleatoire(self,joueur):
+        """Choisis au hasard une case parmi la liste des coups possibles pour un joueur donné"""
+        retour = None        
+        liste_possible = self.coup_possible(joueur)
+        if(len(liste_possible) != 0):
+            rand = random.randint(0,len(liste_possible)-1)
+            retour = liste_possible[rand]
+        else:
+            retour = "pass"
+        return  retour
     
     def finis(self,joueur):
         """"Vérifier si le jeu est terminal"""
-        if self.coup_possible(joueur) == None:
+        if len(self.coup_possible(joueur)) == 0:
             return True
         else:
             return False
+            
+    def changer_joueur(self,joueur):
+        """ Fonction de changement de joueur"""
+        if joueur=="black":
+            joueur="white"
+        else :
+            joueur="black"
+        return joueur
+    
     
 class Case():
     def __init__(self,i,j):
@@ -79,8 +105,19 @@ class Case():
 
 if __name__ == "__main__":
     
-    goban = Grille(8)
+    goban = Grille(3)
+    print(goban.coup_possible("white"))
+    goban.place_pierre(0,1,0,2,"white")
     print(goban)
-    liste = goban.coup_possible("black")
-    print(liste)
+    print(goban.coup_possible("black"))
+    goban.place_pierre(0,0,1,0,"black")
+    print(goban)
+    print(goban.coup_possible("white"))
+    goban.place_pierre(2,0,2,1,"white")
+    print(goban)
+    print(goban.coup_possible("black"))
+    goban.place_pierre(1,2,2,2,"black")
+    print(goban)
+    print(goban.coup_possible("white"))
+    print(goban.finis("white"))
     
